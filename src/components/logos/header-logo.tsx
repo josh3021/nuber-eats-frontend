@@ -1,7 +1,10 @@
+import { Link } from 'react-router-dom';
 import nuberLogo from '../../images/logo.svg';
 
 const HeaderLogo: React.FC = () => (
-  <img src={nuberLogo} className="w-28" alt="Nuber Eats" />
+  <Link to="/">
+    <img src={nuberLogo} className="w-32" alt="Nuber Eats" />
+  </Link>
 );
 
 export default HeaderLogo;

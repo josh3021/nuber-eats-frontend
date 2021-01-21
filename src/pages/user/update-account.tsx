@@ -2,6 +2,7 @@ import { gql, useApolloClient, useMutation } from '@apollo/client';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '../../components/button';
+import ApolloError from '../../components/errors/apollo-error';
 import FormError from '../../components/form-error';
 import { useMe } from '../../hooks/useMe';
 import { EMAIL_REGEXP } from '../../services/RegExp/account';
@@ -55,15 +56,12 @@ function UpdateAccount() {
     }
   };
   const { data: userData } = useMe();
-  const [
-    updateAccount,
-    { loading, error, data: updateAccountMutationResult },
-  ] = useMutation<UpdateAccountMutation, UpdateAccountMutationVariables>(
-    UPDATE_ACCOUNT_MUTATION,
-    {
-      onCompleted,
-    },
-  );
+  const [updateAccount, { loading, error }] = useMutation<
+    UpdateAccountMutation,
+    UpdateAccountMutationVariables
+  >(UPDATE_ACCOUNT_MUTATION, {
+    onCompleted,
+  });
   const {
     register,
     handleSubmit,
@@ -87,6 +85,9 @@ function UpdateAccount() {
       },
     });
   };
+  if (error) {
+    return <ApolloError errorMessage={error.message} />;
+  }
   return (
     <div className="w-full max-w-screen-sm flex flex-col px-5 items-center justify-center mx-auto mt-52">
       <h4 className="w-full font-medium text-center text-xl mb-3">

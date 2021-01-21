@@ -19,7 +19,7 @@ const Header: React.FC = () => {
           <HeaderLogo />
           <span className="text-xl">
             <Link to="/update-account">
-              <FontAwesomeIcon icon={faUser} className="text-xl" />
+              <FontAwesomeIcon icon={faUser} className="text-2xl" />
             </Link>
           </span>
         </div>

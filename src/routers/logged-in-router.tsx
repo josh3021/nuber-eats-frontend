@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import ApolloError from '../components/errors/apollo-error';
 import Header from '../components/header';
 import { useMe } from '../hooks/useMe';
 import NotFound from '../pages/404';
@@ -17,13 +18,7 @@ function LoggedInRouter() {
     );
   }
   if (error) {
-    return (
-      <div className="h-screen flex justify-center items-center">
-        <span className="font-medium text-xl tracking-wide">
-          {error?.message}
-        </span>
-      </div>
-    );
+    return <ApolloError errorMessage={error.message} />;
   }
   return (
     <Router>

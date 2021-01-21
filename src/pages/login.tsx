@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { authorizedTokenVar, isLoggedInVar } from '../apollo';
 import Button from '../components/button';
+import ApolloError from '../components/errors/apollo-error';
 import FormError from '../components/form-error';
 import { LOCALSTORAGE_TOKEN } from '../constants';
 import { EMAIL_REGEXP } from '../services/RegExp/account';
@@ -60,6 +61,9 @@ function Login() {
       loginMutation({ variables: { loginInput: { email, password } } });
     }
   };
+  if (error) {
+    return <ApolloError errorMessage={error.message} />;
+  }
   return (
     <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
       <Helmet>
