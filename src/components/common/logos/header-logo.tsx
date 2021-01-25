@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import nuberLogo from '../../images/logo.svg';
+import nuberLogo from '../../../images/logo.svg';
 
 const HeaderLogo: React.FC = () => (
   <Link to="/">

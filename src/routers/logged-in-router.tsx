@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import ApolloError from '../components/errors/apollo-error';
-import Header from '../components/header';
+import ApolloError from '../components/common/errors/apollo-error';
+import Header from '../components/common/headers/header';
 import { useMe } from '../hooks/useMe';
 import NotFound from '../pages/404';
 import Restaurants from '../pages/client/restaurants';

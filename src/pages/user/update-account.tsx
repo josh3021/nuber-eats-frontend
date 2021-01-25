@@ -1,9 +1,10 @@
 import { gql, useApolloClient, useMutation } from '@apollo/client';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import Button from '../../components/button';
-import ApolloError from '../../components/errors/apollo-error';
-import FormError from '../../components/form-error';
+import Button from '../../components/common/buttons/button';
+import ApolloError from '../../components/common/errors/apollo-error';
+import FormError from '../../components/common/errors/form-error';
+import ReactHelmet from '../../components/common/helmets/react-helmet';
 import { useMe } from '../../hooks/useMe';
 import { EMAIL_REGEXP } from '../../services/RegExp/account';
 import {
@@ -89,44 +90,47 @@ function UpdateAccount() {
     return <ApolloError errorMessage={error.message} />;
   }
   return (
-    <div className="w-full max-w-screen-sm flex flex-col px-5 items-center justify-center mx-auto mt-52">
-      <h4 className="w-full font-medium text-center text-xl mb-3">
-        Edit Profile
-      </h4>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="grid gap-3 mt-5 w-full mb-3">
-        <input
-          ref={register({
-            required: '이메일은 필수항목입니다.',
-            pattern: EMAIL_REGEXP,
-          })}
-          name="email"
-          type="email"
-          placeholder="이메일"
-          className="input"
-          required
-        />
-        {errors.email?.message && (
-          <FormError errorMessage={errors.email?.message} />
-        )}
-        {errors.email?.type === 'pattern' && (
-          <FormError errorMessage="이메일 형식으로 입력해주세요." />
-        )}
-        <input
-          ref={register}
-          name="password"
-          type="password"
-          placeholder="비밀번호"
-          className="input"
-        />
-        <Button
-          canClick={formState.isValid}
-          loading={loading}
-          actionText="Edit Profile"
-        />
-      </form>
-    </div>
+    <>
+      <ReactHelmet title="Update Account" />
+      <div className="w-full max-w-screen-sm flex flex-col px-5 items-center justify-center mx-auto mt-52">
+        <h4 className="w-full font-medium text-center text-xl mb-3">
+          Edit Profile
+        </h4>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid gap-3 mt-5 w-full mb-3">
+          <input
+            ref={register({
+              required: '이메일은 필수항목입니다.',
+              pattern: EMAIL_REGEXP,
+            })}
+            name="email"
+            type="email"
+            placeholder="이메일"
+            className="input"
+            required
+          />
+          {errors.email?.message && (
+            <FormError errorMessage={errors.email?.message} />
+          )}
+          {errors.email?.type === 'pattern' && (
+            <FormError errorMessage="이메일 형식으로 입력해주세요." />
+          )}
+          <input
+            ref={register}
+            name="password"
+            type="password"
+            placeholder="비밀번호"
+            className="input"
+          />
+          <Button
+            canClick={formState.isValid}
+            loading={loading}
+            actionText="Edit Profile"
+          />
+        </form>
+      </div>
+    </>
   );
 }
 

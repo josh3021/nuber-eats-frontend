@@ -1,15 +1,15 @@
 import { gql, useMutation } from '@apollo/client';
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { Link, useHistory } from 'react-router-dom';
-import Button from '../components/button';
-import FormError from '../components/form-error';
-import MainLogo from '../components/logos/main-logo';
+import Button from '../components/common/buttons/button';
+import FormError from '../components/common/errors/form-error';
+import ReactHelmet from '../components/common/helmets/react-helmet';
+import MainLogo from '../components/common/logos/main-logo';
 import { EMAIL_REGEXP } from '../services/RegExp/account';
 import {
   CreateAccountMutation,
-  CreateAccountMutationVariables,
+  CreateAccountMutationVariables
 } from '../__generated__/CreateAccountMutation';
 import { UserRole } from '../__generated__/globalTypes';
 
@@ -71,9 +71,7 @@ function CreateAccount() {
   };
   return (
     <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
-      <Helmet>
-        <title>Create Account | Nuber Eats</title>
-      </Helmet>
+      <ReactHelmet title="Create Account" />
       <div className="w-full max-w-screen-sm flex flex-col px-5 items-center">
         <MainLogo />
         <h4 className="w-full font-medium text-left text-3xl mb-5">

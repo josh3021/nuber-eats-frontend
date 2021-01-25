@@ -1,12 +1,12 @@
 import { gql, useMutation } from '@apollo/client';
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { authorizedTokenVar, isLoggedInVar } from '../apollo';
-import Button from '../components/button';
-import ApolloError from '../components/errors/apollo-error';
-import FormError from '../components/form-error';
+import Button from '../components/common/buttons/button';
+import ApolloError from '../components/common/errors/apollo-error';
+import FormError from '../components/common/errors/form-error';
+import ReactHelmet from '../components/common/helmets/react-helmet';
 import { LOCALSTORAGE_TOKEN } from '../constants';
 import { EMAIL_REGEXP } from '../services/RegExp/account';
 import {
@@ -66,9 +66,7 @@ function Login() {
   }
   return (
     <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
-      <Helmet>
-        <title>Login | Nuber Eats</title>
-      </Helmet>
+      <ReactHelmet title="Login" />
       <div className="w-full max-w-screen-sm flex flex-col px-5 items-center">
         <h4 className="w-full font-medium text-left text-3xl mb-5">
           Welcome Back!

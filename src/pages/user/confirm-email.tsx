@@ -1,6 +1,7 @@
 import { gql, useApolloClient, useMutation } from '@apollo/client';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import ReactHelmet from '../../components/common/helmets/react-helmet';
 import { useMe } from '../../hooks/useMe';
 import {
   VerifyEmailMutation,
@@ -57,12 +58,15 @@ function ConfirmEmail() {
     });
   }, [location.search, verifyEmail]);
   return (
-    <div className="mt-52 flex flex-col items-center justify-center">
-      <h2 className="text-lg mb-2 font-medium">Confirming Email</h2>
-      <h4 className="text-gray-700 text-sm">
-        Please wait... Do not leave this page.
-      </h4>
-    </div>
+    <>
+      <ReactHelmet title="Confrim Email" />
+      <div className="mt-52 flex flex-col items-center justify-center">
+        <h2 className="text-lg mb-2 font-medium">Confirming Email</h2>
+        <h4 className="text-gray-700 text-sm">
+          Please wait... Do not leave this page.
+        </h4>
+      </div>
+    </>
   );
 }
 
