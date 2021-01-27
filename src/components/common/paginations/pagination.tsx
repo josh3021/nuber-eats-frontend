@@ -18,13 +18,13 @@ function Pagination({
       {currentPage > 1 ? (
         <div className="hover:bg-gray-200 p-2 rounded-lg">
           <button className="font-medium text-xl" onClick={onPrevPage}>
-            &larr; Prev Page
+            &larr;
           </button>
         </div>
       ) : (
         <div className="p-2">
           <span className="font-medium text-xl text-gray-400 opacity-50">
-            &larr; Prev Page
+            &larr;
           </span>
         </div>
       )}
@@ -34,13 +34,13 @@ function Pagination({
       {currentPage < totalPages ? (
         <div className="hover:bg-gray-200 p-2 rounded-lg">
           <button className="font-medium text-xl" onClick={onNextPage}>
-            Next Page &rarr;
+            &rarr;
           </button>
         </div>
       ) : (
         <div className="p-2">
           <span className="font-medium text-xl text-gray-400 opacity-50">
-            Next Page &rarr;
+            &rarr;
           </span>
         </div>
       )}

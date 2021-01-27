@@ -5,6 +5,6 @@ module.exports = {
       url: 'http://localhost:3001/graphql',
     },
     tagName: 'gql',
-    includes: ['./src/**/*.tsx'],
+    includes: ['./src/**/*.{ts,tsx}'],
   },
 };

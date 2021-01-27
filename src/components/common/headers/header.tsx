@@ -15,7 +15,7 @@ const Header: React.FC = () => {
         </div>
       )}
       <header className="py-4">
-        <div className="w-full px-5 xl:px-0 max-w-screen-xl mx-auto flex justify-between items-center">
+        <div className="max-w-header justify-between">
           <HeaderLogo />
           <span className="text-xl">
             <Link to="/update-account">

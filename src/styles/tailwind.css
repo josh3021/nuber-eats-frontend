@@ -9,4 +9,12 @@
   @apply mt-3 text-lg font-medium text-white py-4 bg-lime-500 hover:bg-lime-600 transition-colors;
 }
 
+.max-w-header {
+  @apply w-full mx-auto items-center px-10 flex
+}
+
+.max-w-container {
+  @apply max-w-header flex-col
+}
+
 @tailwind utilities;

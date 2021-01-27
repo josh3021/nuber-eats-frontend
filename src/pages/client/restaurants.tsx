@@ -1,14 +1,25 @@
 import { gql, useQuery } from '@apollo/client';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 import CategoryList from '../../components/categories/category-list';
 import ApolloError from '../../components/common/errors/apollo-error';
+import FormError from '../../components/common/errors/form-error';
 import ReactHelmet from '../../components/common/helmets/react-helmet';
 import Pagination from '../../components/common/paginations/pagination';
-import Restaurant from '../../components/restaurants/restaurant';
+import GridLayout from '../../components/common/restaurants/grid-layout';
+import Title from '../../components/common/titles/title';
+import { RESTAURANT_FRAGMENT } from '../../graphql/fragments/restaurants';
 import {
   RestaurantsPageQuery,
   RestaurantsPageQueryVariables,
 } from '../../__generated__/RestaurantsPageQuery';
+
+interface ISearchKeywordProps {
+  keyword: string;
+}
 
 const RESTAURANTS_PAGE_QUERY = gql`
   query RestaurantsPageQuery($restaurantsInput: RestaurantsInput!) {
@@ -29,21 +40,24 @@ const RESTAURANTS_PAGE_QUERY = gql`
       totalPages
       totalResults
       results {
-        id
-        name
-        coverImage
-        address
-        category {
-          name
-        }
-        isPromoted
+        ...RestaurantParts
       }
     }
   }
+  ${RESTAURANT_FRAGMENT}
 `;
 
 function Restaurants() {
   const [page, setPage] = useState<number>(1);
+  const history = useHistory();
+  const {
+    register,
+    getValues,
+    handleSubmit: handleSearchKeywordSubmit,
+    errors,
+  } = useForm<ISearchKeywordProps>({
+    mode: 'onChange',
+  });
   const { loading, error, data: restaurantsPageData } = useQuery<
     RestaurantsPageQuery,
     RestaurantsPageQueryVariables
@@ -66,54 +80,57 @@ function Restaurants() {
   const handleNextPage = (): void => {
     setPage(page + 1);
   };
+  const onSearchKeywordSubmit = () => {
+    history.push({
+      pathname: '/search',
+      search: `?keyword=${getValues().keyword}`,
+    });
+  };
 
   return (
     <>
-      <ReactHelmet title="Restaurants" />
+      <ReactHelmet title="Home" />
       <div>
-        <form className="w-full py-40 bg-gray-800 flex items-center justify-center">
-          <input
-            type="search"
-            className="input w-10/12 sm:w-9/12 md:w-5/12 border-none rounded-md"
-            placeholder="Search Restaurants"
-          />
+        <form
+          onSubmit={handleSearchKeywordSubmit(onSearchKeywordSubmit)}
+          className="w-full py-40 bg-gray-800 flex items-center justify-center">
+          <div className="flex flex-col items-center justify-centers w-9/12 sm:w-8/12 md:w-7/12 mx-auto">
+            <div className="flex w-full mx-auto">
+              <input
+                ref={register({
+                  required: '키워드를 입력해주세요.',
+                })}
+                name="keyword"
+                type="search"
+                className="input w-full border-none rounded-l-md"
+                placeholder="Search Restaurants"
+              />
+              <button className="text-sm font-bold focus:outline-none text-white py-4 transition-colors px-5 rounded-r-md bg-purple-600">
+                <FontAwesomeIcon icon={faSearch} />
+              </button>
+            </div>
+            <div>
+              {errors.keyword?.message && (
+                <FormError errorMessage={errors.keyword?.message} />
+              )}
+            </div>
+          </div>
         </form>
-        <div className="max-w-screen-xl mx-auto items-center">
+        <div className="max-w-container">
           {!loading && (
-            <div className="max-w-screen-xl lg:max-w-screen-2xl mx-auto mt-8">
+            <div className="max-w-screen-xl lg:max-w-screen-2xl mx-5 mt-8 w-full">
               {restaurantsPageData?.categories.categories && (
                 <CategoryList
                   categories={restaurantsPageData.categories.categories}
+                  key="CategoryList"
                 />
               )}
               {restaurantsPageData?.restaurants.results && (
                 <div className="flex flex-col">
-                  <div className="max-w-screen-xl ml-5 mb-7 flex flex-col md:flex-row justify-between">
-                    <h1 className="font-semibold text-4xl">
-                      Food Delivery in Seoul
-                    </h1>
-                    <div className="flex flex-col items-start md:items-end">
-                      <h3 className="font-medium text-base">
-                        # Stay at Home for a While 🏠
-                      </h3>
-                      <h6 className="font-light">
-                        Thanks for using Our Service 🙏
-                      </h6>
-                    </div>
-                  </div>
-                  <div className="max-w-screen-sm md:max-w-screen-2xl flex flex-col md:grid md:grid-cols-3 md:gap-7 pb-10">
-                    {restaurantsPageData.restaurants.results.map(
-                      ({ id, coverImage, name, category }) => (
-                        <Restaurant
-                          id={id}
-                          coverImage={coverImage}
-                          name={name}
-                          categoryName={category?.name}
-                          key={id}
-                        />
-                      ),
-                    )}
-                  </div>
+                  <Title text={'Food Delivery in Seoul'} />
+                  <GridLayout
+                    restaurants={restaurantsPageData.restaurants.results}
+                  />
                   {restaurantsPageData.restaurants.totalPages && (
                     <Pagination
                       totalPages={restaurantsPageData.restaurants.totalPages}
