@@ -1,10 +1,9 @@
-import { gql, useMutation } from '@apollo/client';
+import { ApolloError, gql, useMutation } from '@apollo/client';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { authorizedTokenVar, isLoggedInVar } from '../apollo';
 import Button from '../components/common/buttons/button';
-import ApolloError from '../components/common/errors/apollo-error';
 import FormError from '../components/common/errors/form-error';
 import ReactHelmet from '../components/common/helmets/react-helmet';
 import { LOCALSTORAGE_TOKEN } from '../constants';
@@ -19,7 +18,7 @@ interface ILoginForm {
   password: string;
 }
 
-const LOGIN_MUTATION = gql`
+export const LOGIN_MUTATION = gql`
   mutation LoginMutation($loginInput: LoginInput!) {
     login(input: $loginInput) {
       result
@@ -49,11 +48,15 @@ function Login() {
       isLoggedInVar(true);
     }
   };
-  const [
-    loginMutation,
-    { loading, error, data: loginMutationResult },
-  ] = useMutation<LoginMutation, LoginMutationVariables>(LOGIN_MUTATION, {
+  const onError = (error: ApolloError) => {
+    console.log(error.message);
+  };
+  const [loginMutation, { loading, data: loginMutationResult }] = useMutation<
+    LoginMutation,
+    LoginMutationVariables
+  >(LOGIN_MUTATION, {
     onCompleted,
+    onError,
   });
   const onSubmit = () => {
     if (!loading) {
@@ -61,9 +64,6 @@ function Login() {
       loginMutation({ variables: { loginInput: { email, password } } });
     }
   };
-  if (error) {
-    return <ApolloError errorMessage={error.message} />;
-  }
   return (
     <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
       <ReactHelmet title="Login" />
@@ -86,10 +86,16 @@ function Login() {
             required
           />
           {errors.email?.message && (
-            <FormError errorMessage={errors.email?.message} />
+            <FormError
+              title="email-validation-error"
+              errorMessage={errors.email?.message}
+            />
           )}
           {errors.email?.type === 'pattern' && (
-            <FormError errorMessage="이메일 형식으로 입력해주세요." />
+            <FormError
+              title="email-validation-error"
+              errorMessage="이메일 형식으로 입력해주세요."
+            />
           )}
           <input
             ref={register({
@@ -102,15 +108,22 @@ function Login() {
             required
           />
           {errors.password?.message && (
-            <FormError errorMessage={errors.password?.message} />
+            <FormError
+              title="password-validation-error"
+              errorMessage={errors.password?.message}
+            />
           )}
           <Button
             canClick={formState.isValid}
             loading={loading}
             actionText="Login"
+            name="login-btn"
           />
           {loginMutationResult?.login.error && (
-            <FormError errorMessage={loginMutationResult.login?.error} />
+            <FormError
+              title="login-mutation-error"
+              errorMessage={loginMutationResult.login?.error}
+            />
           )}
         </form>
         <div>

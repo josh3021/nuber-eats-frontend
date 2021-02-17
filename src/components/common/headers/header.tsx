@@ -10,11 +10,11 @@ const Header: React.FC = () => {
   return (
     <>
       {!data?.me.verified && (
-        <div className="w-full p-3 xl:px-0 max-w-screen-xl mx-auto text-center text-white bg-red-500">
+        <div className="w-full xl:px-0 p-3 text-center text-white bg-red-500">
           <span>Please verify your email!</span>
         </div>
       )}
-      <header className="py-4">
+      <header className="container py-4">
         <div className="max-w-header justify-between">
           <HeaderLogo />
           <span className="text-xl">

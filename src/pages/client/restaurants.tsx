@@ -111,7 +111,10 @@ function Restaurants() {
             </div>
             <div>
               {errors.keyword?.message && (
-                <FormError errorMessage={errors.keyword?.message} />
+                <FormError
+                  title="keyword-validation-error"
+                  errorMessage={errors.keyword?.message}
+                />
               )}
             </div>
           </div>

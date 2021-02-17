@@ -9,7 +9,7 @@ import MainLogo from '../components/common/logos/main-logo';
 import { EMAIL_REGEXP } from '../services/RegExp/account';
 import {
   CreateAccountMutation,
-  CreateAccountMutationVariables
+  CreateAccountMutationVariables,
 } from '../__generated__/CreateAccountMutation';
 import { UserRole } from '../__generated__/globalTypes';
 
@@ -19,7 +19,7 @@ interface ICreateAccountForm {
   role: UserRole;
 }
 
-const CREATE_ACCOUNT_MUTATION = gql`
+export const CREATE_ACCOUNT_MUTATION = gql`
   mutation CreateAccountMutation($createAccountInput: CreateAccountInput!) {
     createAccount(input: $createAccountInput) {
       result
@@ -44,7 +44,7 @@ function CreateAccount() {
   const history = useHistory();
   const onCompleted = (data: CreateAccountMutation) => {
     const {
-      createAccount: { result, error },
+      createAccount: { result },
     } = data;
     if (result) {
       history.push('/');
@@ -92,7 +92,16 @@ function CreateAccount() {
             required
           />
           {errors.email?.message && (
-            <FormError errorMessage={errors.email?.message} />
+            <FormError
+              title="email-validation-error"
+              errorMessage={errors.email?.message}
+            />
+          )}
+          {errors.email?.type === 'pattern' && (
+            <FormError
+              title="email-validation-error"
+              errorMessage="이메일 형식으로 입력해주세요."
+            />
           )}
           <input
             ref={register({
@@ -105,10 +114,10 @@ function CreateAccount() {
             required
           />
           {errors.password?.message && (
-            <FormError errorMessage={errors.password?.message} />
-          )}
-          {errors.email?.type === 'pattern' && (
-            <FormError errorMessage="이메일 형식으로 입력해주세요." />
+            <FormError
+              title="password-validation-error"
+              errorMessage={errors.password?.message}
+            />
           )}
           <select
             ref={register({ required: true })}
@@ -122,9 +131,11 @@ function CreateAccount() {
             canClick={formState.isValid}
             loading={loading}
             actionText="Create Account"
+            name="create-account-btn"
           />
           {createAccountMutationResult?.createAccount.error && (
             <FormError
+              title="create-account-mutation-error"
               errorMessage={createAccountMutationResult.createAccount?.error}
             />
           )}

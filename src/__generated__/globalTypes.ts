@@ -25,13 +25,59 @@ export interface CreateAccountInput {
   role: UserRole;
 }
 
+export interface CreateDishInput {
+  name: string;
+  price: number;
+  description: string;
+  options?: DishOptionInputType[] | null;
+  restaurantId: string;
+}
+
+export interface CreateOrderInput {
+  restaurantId: string;
+  items: CreateOrderItemInput[];
+}
+
+export interface CreateOrderItemInput {
+  dishId: string;
+  options?: OrderItemOptionInputType[] | null;
+}
+
+export interface CreateRestaurantInput {
+  name: string;
+  address: string;
+  coverImage: string;
+  categoryName: string;
+}
+
+export interface DishChoiceInputType {
+  name: string;
+  extra?: number | null;
+}
+
+export interface DishOptionInputType {
+  name: string;
+  choices?: DishChoiceInputType[] | null;
+  extra?: number | null;
+}
+
 export interface LoginInput {
   email: string;
   password: string;
 }
 
+export interface MyRestaurantInput {
+  restaurantId: number;
+}
+
+export interface OrderItemOptionInputType {
+  name: string;
+  choice?: string | null;
+  extra?: number | null;
+}
+
 export interface RestaurantInput {
-  restaurantId: string;
+  restaurantId: number;
 }
 
 export interface RestaurantsInput {

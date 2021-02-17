@@ -7,9 +7,78 @@ import Category from '../pages/client/category';
 import RestaurantDetail from '../pages/client/restaurant-detail';
 import Restaurants from '../pages/client/restaurants';
 import Search from '../pages/client/search';
+import CreateDish from '../pages/owner/create-dish';
+import CreateRestuarnt from '../pages/owner/create-restaurant';
+import MyRestaurant from '../pages/owner/my-restaurant';
+import MyRestaurants from '../pages/owner/my-restaurants';
 import ConfirmEmail from '../pages/user/confirm-email';
 import UpdateAccount from '../pages/user/update-account';
 import { UserRole } from '../__generated__/globalTypes';
+
+interface IRouteProps {
+  path: string;
+  component: JSX.Element;
+  exact?: boolean;
+}
+
+const commonRoutes: IRouteProps[] = [
+  {
+    path: '/confirm-email',
+    component: <ConfirmEmail />,
+    exact: true,
+  },
+  {
+    path: '/update-account',
+    component: <UpdateAccount />,
+    exact: true,
+  },
+];
+
+const clientRoutes: IRouteProps[] = [
+  {
+    path: '/',
+    component: <Restaurants />,
+    exact: true,
+  },
+  {
+    path: '/restaurant-detail/:id',
+    component: <RestaurantDetail />,
+    exact: true,
+  },
+  {
+    path: '/search',
+    component: <Search />,
+    exact: true,
+  },
+  {
+    path: '/category',
+    component: <Category />,
+    exact: true,
+  },
+];
+
+const ownerRoutes = [
+  {
+    path: '/',
+    component: <MyRestaurants />,
+    exact: true,
+  },
+  {
+    path: '/restaurant-detail/:id',
+    component: <MyRestaurant />,
+    exact: true,
+  },
+  {
+    path: '/create-restaurant',
+    component: <CreateRestuarnt />,
+    exact: true,
+  },
+  {
+    path: '/restaurant-detail/:id/create-dish',
+    component: <CreateDish />,
+    exact: true,
+  },
+];
 
 function LoggedInRouter() {
   const { data, loading, error } = useMe();
@@ -26,8 +95,24 @@ function LoggedInRouter() {
   return (
     <Router>
       <Header />
-      <Switch key="client">
-        {data.me.role === UserRole.Client && ClientRoutes}
+      <Switch>
+        {data.me.role === UserRole.Client &&
+          clientRoutes.map((route) => (
+            <Route key={route.path} path={route.path} exact={route.exact}>
+              {route.component}
+            </Route>
+          ))}
+        {data.me.role === UserRole.Owner &&
+          ownerRoutes.map((route) => (
+            <Route key={route.path} path={route.path} exact={route.exact}>
+              {route.component}
+            </Route>
+          ))}
+        {commonRoutes.map((route) => (
+          <Route key={route.path} path={route.path} exact={route.exact}>
+            {route.component}
+          </Route>
+        ))}
         <Route>
           <NotFound />
         </Route>
@@ -35,26 +120,5 @@ function LoggedInRouter() {
     </Router>
   );
 }
-
-const ClientRoutes = [
-  <Route key="/" exact path="/">
-    <Restaurants />
-  </Route>,
-  <Route key="/restaurant-detail" exact path="/restaurant-detail/:id">
-    <RestaurantDetail />
-  </Route>,
-  <Route key="/confirm-email" exact path="/confirm-email">
-    <ConfirmEmail />
-  </Route>,
-  <Route key="/update-account" exact path="/update-account">
-    <UpdateAccount />
-  </Route>,
-  <Route key="/search" exact path="/search">
-    <Search />
-  </Route>,
-  <Route key="/category" exact path="/category/:slug">
-    <Category />
-  </Route>,
-];
 
 export default LoggedInRouter;

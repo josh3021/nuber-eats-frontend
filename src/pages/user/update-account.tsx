@@ -111,10 +111,16 @@ function UpdateAccount() {
             required
           />
           {errors.email?.message && (
-            <FormError errorMessage={errors.email?.message} />
+            <FormError
+              title="email-validation-error"
+              errorMessage={errors.email?.message}
+            />
           )}
           {errors.email?.type === 'pattern' && (
-            <FormError errorMessage="이메일 형식으로 입력해주세요." />
+            <FormError
+              title="email-validation-error"
+              errorMessage="이메일 형식으로 입력해주세요."
+            />
           )}
           <input
             ref={register}
@@ -126,7 +132,8 @@ function UpdateAccount() {
           <Button
             canClick={formState.isValid}
             loading={loading}
-            actionText="Edit Profile"
+            actionText="Update Account"
+            name="update-account-btn"
           />
         </form>
       </div>
