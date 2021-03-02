@@ -45,12 +45,13 @@
   },
   "scripts": {
     "start": "yarn apollo:codegen & yarn tailwind:build & react-scripts start",
-    "prebuild": "yarn tailwind:build",
-    "build": "react-scripts build",
+    "prebuild": "yarn tailwind:build-production",
+    "build": "CI=false react-scripts build",
     "test": "react-scripts test",
     "test:cov": "yarn test --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
+    "tailwind:build-production": "cross-env NODE_ENV=production yarn tailwind:build",
     "apollo:codegen": "rimraf src/__generated__ & apollo client:codegen src/__generated__ --target=typescript --outputFlat"
   },
   "eslintConfig": {
