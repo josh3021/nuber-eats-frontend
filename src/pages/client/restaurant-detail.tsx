@@ -65,7 +65,7 @@ function RestaurantDetail() {
       createOrder: { result, orderId },
     } = data;
     if (result) {
-      history.push(`/orders/${orderId}`);
+      history.push(`/order/${orderId}`);
     }
   };
   const [createOrderMutation, { loading: placingOrder }] = useMutation<
@@ -90,11 +90,14 @@ function RestaurantDetail() {
     setOrderStarted(true);
   };
   const onTriggerConfirmOrder = () => {
+    if (placingOrder) {
+      return;
+    }
     if (orderItems.length === 0) {
       window.alert("Can't order empty order");
     } else {
       const ok = window.confirm('You are about to place an order');
-      if (ok) {
+      if (ok && !placingOrder) {
         createOrderMutation({
           variables: {
             createOrderInput: {

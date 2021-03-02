@@ -9,6 +9,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "autoprefixer": "^10.2.1",
     "cypress": "^6.4.0",
+    "google-map-react": "^2.1.9",
     "graphql": "^15.4.0",
     "mock-apollo-client": "^1.0.0",
     "postcss": "^8.2.3",
@@ -20,6 +21,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "rimraf": "^3.0.2",
+    "subscriptions-transport-ws": "^0.9.18",
     "tailwindcss": "^2.0.2",
     "victory": "^35.4.9",
     "web-vitals": "^0.2.4"
@@ -29,6 +31,8 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/google-map-react": "^2.1.0",
+    "@types/googlemaps": "^3.43.3",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
@@ -41,6 +45,7 @@
   },
   "scripts": {
     "start": "yarn apollo:codegen & yarn tailwind:build & react-scripts start",
+    "prebuild": "yarn tailwind:build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:cov": "yarn test --coverage --watchAll=false",

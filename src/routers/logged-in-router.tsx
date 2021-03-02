@@ -7,6 +7,8 @@ import Category from '../pages/client/category';
 import RestaurantDetail from '../pages/client/restaurant-detail';
 import Restaurants from '../pages/client/restaurants';
 import Search from '../pages/client/search';
+import DashBoardPage from '../pages/delivery/dashboard';
+import OrderPage from '../pages/order';
 import CreateDish from '../pages/owner/create-dish';
 import CreateRestuarnt from '../pages/owner/create-restaurant';
 import MyRestaurant from '../pages/owner/my-restaurant';
@@ -30,6 +32,11 @@ const commonRoutes: IRouteProps[] = [
   {
     path: '/update-account',
     component: <UpdateAccount />,
+    exact: true,
+  },
+  {
+    path: '/order/:id',
+    component: <OrderPage />,
     exact: true,
   },
 ];
@@ -57,7 +64,7 @@ const clientRoutes: IRouteProps[] = [
   },
 ];
 
-const ownerRoutes = [
+const ownerRoutes: IRouteProps[] = [
   {
     path: '/',
     component: <MyRestaurants />,
@@ -76,6 +83,14 @@ const ownerRoutes = [
   {
     path: '/restaurant-detail/:id/create-dish',
     component: <CreateDish />,
+    exact: true,
+  },
+];
+
+const deliveryRoutes: IRouteProps[] = [
+  {
+    path: '/',
+    component: <DashBoardPage />,
     exact: true,
   },
 ];
@@ -104,6 +119,12 @@ function LoggedInRouter() {
           ))}
         {data.me.role === UserRole.Owner &&
           ownerRoutes.map((route) => (
+            <Route key={route.path} path={route.path} exact={route.exact}>
+              {route.component}
+            </Route>
+          ))}
+        {data.me.role === UserRole.Delivery &&
+          deliveryRoutes.map((route) => (
             <Route key={route.path} path={route.path} exact={route.exact}>
               {route.component}
             </Route>

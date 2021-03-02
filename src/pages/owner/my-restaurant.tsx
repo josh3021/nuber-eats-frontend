@@ -1,6 +1,6 @@
-import { gql, useQuery } from '@apollo/client';
-import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { gql, useQuery, useSubscription } from '@apollo/client';
+import React, { useEffect } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   VictoryAxis,
   VictoryChart,
@@ -13,17 +13,30 @@ import RestaurantBanner from '../../components/common/banners/restaurant-banner'
 import ReactHelmet from '../../components/common/helmets/react-helmet';
 import { Dish } from '../../components/dishes/dish';
 import { DISH_FRAGMENT } from '../../graphql/fragments/dishes';
-import { ORDER_FRAGMENT } from '../../graphql/fragments/orders';
+import {
+  FULL_ORDER_FRAGMENT,
+  ORDER_FRAGMENT,
+} from '../../graphql/fragments/orders';
 import { RESTAURANT_FRAGMENT } from '../../graphql/fragments/restaurants';
 import { kRWFormat } from '../../services/Numbers/money';
 import {
   MyRestaurant,
   MyRestaurantVariables,
 } from '../../__generated__/MyRestaurant';
+import { PendingOrder } from '../../__generated__/PendingOrder';
 
 interface IParamsProps {
   id: string;
 }
+
+const PENDING_ORDER_SUBSCRIPTION = gql`
+  subscription PendingOrder {
+    pendingOrder {
+      ...FullOrderParts
+    }
+  }
+  ${FULL_ORDER_FRAGMENT}
+`;
 
 export const MY_RESTAURANT_QUERY = gql`
   query MyRestaurant($myRestaurantInput: MyRestaurantInput!) {
@@ -60,6 +73,7 @@ const chartData = [
 ];
 function MyRestaurantPage() {
   const { id: restaurantId } = useParams<IParamsProps>();
+  const history = useHistory();
   const { loading, error, data } = useQuery<
     MyRestaurant,
     MyRestaurantVariables
@@ -70,6 +84,14 @@ function MyRestaurantPage() {
       },
     },
   });
+  const { data: subscriptionData } = useSubscription<PendingOrder>(
+    PENDING_ORDER_SUBSCRIPTION,
+  );
+  useEffect(() => {
+    if (subscriptionData?.pendingOrder) {
+      history.push(`/order/${subscriptionData.pendingOrder.id}`);
+    }
+  }, [history, subscriptionData]);
   return (
     <>
       <ReactHelmet title="My Restaurant" />
